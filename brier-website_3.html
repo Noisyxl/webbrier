@@ -13,12 +13,12 @@
 <meta property="og:title" content="BRIER — keep the receipt">
 <meta property="og:description" content="Seal a probability before the answer exists. Settle it from a source. Then find out what your confidence was worth. Hash-chained forecasts, proper scoring rules, offline by default — anchored on Robinhood Chain.">
 <meta property="og:site_name" content="brier">
-<meta property="og:url" content="https://YOUR-DOMAIN/">
-<meta property="og:image" content="https://YOUR-DOMAIN/og.png">
+<meta property="og:url" content="/">
+<meta property="og:image" content="/og.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="BRIER — keep the receipt">
 <meta name="twitter:description" content="Seal a probability before the answer exists. Settle it from a source. Then find out what your confidence was worth. Hash-chained forecasts, proper scoring rules, offline by default — anchored on Robinhood Chain.">
-<meta name="twitter:image" content="https://YOUR-DOMAIN/og.png">
+<meta name="twitter:image" content="/og.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap">
@@ -103,18 +103,6 @@ h1{margin:0;font-size:clamp(56px,13.5vw,168px);line-height:.86;font-weight:500;l
   font:inherit;font-size:10.5px;letter-spacing:1px;padding:4px 10px;cursor:pointer;text-transform:uppercase}
 .cmd button:hover{border-color:var(--accent);color:var(--accent)}
 
-/* ── the pipeline strip ── */
-#pipe{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:44px}
-.st{border:1px solid var(--line);background:var(--panel);padding:12px 12px 14px;position:relative;
-  min-height:112px;transition:border-color .25s ease}
-.st.on{border-color:var(--accent)}
-.st .k{font-size:11px;letter-spacing:2px;color:var(--text)}
-.st.on .k{color:var(--accent)}
-.st .n{position:absolute;top:11px;right:12px;font-size:10px;color:var(--dim)}
-.st .d{color:var(--dim);font-size:11px;line-height:1.45;margin-top:9px}
-.st .bar{position:absolute;left:0;bottom:0;height:2px;width:0;background:var(--accent);transition:width .3s linear}
-@media(max-width:820px){#pipe{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:480px){#pipe{grid-template-columns:1fr}}
 
 /* ── the headline number ── */
 #big{display:grid;grid-template-columns:1fr auto;gap:34px;align-items:end}
@@ -269,7 +257,15 @@ pre{max-width:100%}
   text-transform:uppercase;color:var(--dim);white-space:nowrap;pointer-events:none;transition:color .2s}
 .rlab.on{color:var(--accent)}
 .rlab s{display:block;text-decoration:none;font-size:9px;letter-spacing:1px;color:var(--line);margin-top:2px}
-.c1{grid-template-columns:1fr}
+.enforce{border:1px solid var(--line);background:var(--panel);padding:22px 20px}
+.enforce .hd{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--accent);
+  padding-bottom:14px;border-bottom:1px solid var(--line)}
+.enforce>div:not(.hd){display:grid;grid-template-columns:34px 1fr;gap:12px;padding:15px 0;
+  border-bottom:1px solid var(--line2)}
+.enforce>div:not(.hd):last-of-type{border-bottom:none}
+.enforce b{font-weight:400;color:var(--dim);font-size:12px}
+.enforce p{margin:0;color:var(--muted);font-size:13px;line-height:1.6}
+.enforce .foot{margin-top:15px;color:var(--dim);font-size:12px;line-height:1.6}
 @media(max-width:880px){.loopgrid{grid-template-columns:1fr}.ringwrap{margin:0 auto}}
 
 /* ── buttons ── */
@@ -314,6 +310,40 @@ pre{max-width:100%}
 .cabox code.empty{color:var(--accent)}
 .cabox button{flex:none}
 @media(max-width:820px){.tokgrid{grid-template-columns:1fr}}
+
+/* ── models ── */
+.models{border:1px solid var(--line);background:var(--panel);margin-top:26px}
+.mhd{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:14px 18px;border-bottom:1px solid var(--line)}
+.mhd span:first-child{font-size:12px;letter-spacing:1.4px;text-transform:uppercase}
+.mtag{margin-left:auto;border:1px solid var(--line);color:var(--dim);font-size:9.5px;letter-spacing:1.6px;
+  padding:3px 8px;text-transform:uppercase}
+.mgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line)}
+.mcard{display:block;background:var(--ground);padding:18px;text-decoration:none;transition:background .16s}
+.mcard:hover{background:#0F0F0E}
+.mname{display:block;font-size:15px;font-weight:500}
+.mprov{display:block;color:var(--muted);font-size:11.5px;margin-top:6px}
+.mprov code{color:var(--dim)}
+.mlink{display:block;color:var(--accent);font-size:11.5px;margin-top:14px}
+.mnote{padding:16px 18px;color:var(--muted);font-size:13px;line-height:1.6;border-top:1px solid var(--line2)}
+.mnote b{color:var(--text);font-weight:400}
+@media(max-width:820px){.mgrid{grid-template-columns:1fr}}
+
+/* ── roadmap ── */
+.road{border:1px solid var(--line);background:var(--panel)}
+.rgroup{border-bottom:1px solid var(--line)}
+.rgroup:last-child{border-bottom:none}
+.rghd{display:flex;align-items:center;gap:11px;padding:13px 18px;border-bottom:1px solid var(--line2)}
+.rghd i{width:8px;height:8px;flex:none}
+.rghd i.s{background:var(--text)}
+.rghd i.n{background:var(--accent)}
+.rghd i.l{background:var(--dim)}
+.rghd b{font-weight:400;font-size:11px;letter-spacing:2px;text-transform:uppercase}
+.rghd s{text-decoration:none;margin-left:auto;color:var(--dim);font-size:10.5px;letter-spacing:1px}
+.ritem{display:grid;grid-template-columns:1fr;gap:2px;padding:12px 18px;border-bottom:1px solid var(--line2)}
+.ritem:last-child{border-bottom:none}
+.ritem span{font-size:14px}
+.ritem em{font-style:normal;color:var(--muted);font-size:12.5px;line-height:1.55}
+.roadnote{color:var(--dim);font-size:12px;margin-top:14px;line-height:1.6;max-width:78ch}
 
 /* ── pool panel + live chart ── */
 .poolrow{display:flex;flex-direction:column}
@@ -395,6 +425,7 @@ footer a:hover{color:var(--accent);border-color:var(--accent)}
   <a class="nl" href="#loop">the loop</a>
   <a class="nl" href="#board">scoreboard</a>
   <a class="nl" href="#cal">calibration</a>
+  <a class="nl" href="#roadmap">roadmap</a>
   <a class="nl" href="#token">token</a>
   <a class="nl" href="#chart">chart</a>
   <a class="cta" href="https://github.com/Noisyxl/brier" target="_blank" rel="noopener">GITHUB</a>
@@ -444,7 +475,15 @@ footer a:hover{color:var(--accent);border-color:var(--accent)}
     <em>$</em><code id="c1">npx brier demo &amp;&amp; npx brier score</code>
     <button data-copy="c1">copy</button>
   </div>
-  <p id="sub" style="margin-top:12px;font-size:12.5px">Four seconds. No API key. The scoreboard below is what prints.</p>
+  <div class="cmd" style="margin-top:8px">
+    <em>$</em><code id="c2">npm install -g github:Noisyxl/brier</code>
+    <button data-copy="c2">copy</button>
+  </div>
+  <p id="sub" style="margin-top:12px;font-size:12.5px">Four seconds, no API key, no network. Then
+  <code style="color:var(--accent)">doctor</code> &middot;
+  <code style="color:var(--accent)">ask</code> &middot;
+  <code style="color:var(--accent)">calibrate</code> &middot;
+  <code style="color:var(--accent)">ledger --verify</code>.</p>
 
   <div class="btns">
     <a class="btn pri" href="#room"><i></i>watch the room</a>
@@ -453,7 +492,6 @@ footer a:hover{color:var(--accent);border-color:var(--accent)}
     <a class="btn ghost" href="https://github.com/Noisyxl/brier" target="_blank" rel="noopener">github</a>
   </div>
 
-  <div id="pipe"></div>
 </div></section>
 
 <!-- ══════════════ the number ══════════════ -->
@@ -488,21 +526,12 @@ footer a:hover{color:var(--accent);border-color:var(--accent)}
       <tr><td>questions graded by whoever wrote them</td>
           <td>a question carries its own resolver and test, fixed at ask time and hashed into its id — rewording it makes a different question with no forecasts</td>
           <td><code>ask</code></td></tr>
-      <tr><td>“it seems fairly likely” quietly becoming 0.7 in a spreadsheet</td>
-          <td>an answer without a usable probability is recorded as a failure, not converted into one</td>
-          <td><code>ask</code></td></tr>
       <tr><td>accuracy, which rewards only ever saying 1% and 99%</td>
           <td>proper scoring rules, where your best score comes from stating what you believe</td>
           <td><code>score</code></td></tr>
       <tr><td>a good score on a set where most things happen</td>
           <td><code>always-yes</code> is on every scoreboard automatically, and it will be brilliant on that set</td>
           <td><code>score</code></td></tr>
-      <tr><td>a single number that hides why</td>
-          <td>Murphy’s decomposition — reliability, resolution, uncertainty — plus the binning residual everyone else drops</td>
-          <td><code>calibrate</code></td></tr>
-      <tr><td>settling only the questions that went well</td>
-          <td>the ledger refuses to settle a question nobody answered</td>
-          <td>enforced</td></tr>
     </tbody>
   </table>
 </div></section>
@@ -519,12 +548,16 @@ footer a:hover{color:var(--accent);border-color:var(--accent)}
         <div class="rl">lap <b id="ringL">0</b> &middot; <span id="ringS">running</span></div>
       </div>
     </div>
-    <div class="cards c1" id="loopcards"></div>
-  </div>
-  <p class="note rv">Three properties are enforced in code rather than requested in a prompt, each with a test named
-  after it: <b>a forecast cannot be sealed once the question is settled</b>; <b>a question with no forecasts
-  cannot be settled</b>; and <b>the resolver cannot see any forecast while the scorer cannot see the
-  resolver</b> — settlement is a pure function of source and test, fixed before any answer existed.</p>
+    <div class="enforce">
+      <div class="hd">Enforced in code, not requested in a prompt</div>
+      <div><b>01</b><p>A forecast cannot be sealed once the question is settled &mdash; the obvious cheat.</p></div>
+      <div><b>02</b><p>A question with no forecasts cannot be settled &mdash; the quieter one, settling only
+        what went well.</p></div>
+      <div><b>03</b><p>The resolver cannot see any forecast, and the scorer cannot see the resolver. Settlement
+        is a pure function of source and test, fixed before any answer existed.</p></div>
+      <p class="foot">Each one has a test named after it. Everywhere else in this space, the person who wrote
+      the question also decides afterwards whether it came true.</p>
+    </div>
 </div></section>
 
 
@@ -562,6 +595,30 @@ footer a:hover{color:var(--accent);border-color:var(--accent)}
   produced with no API budget still shows a real shape — and so the demo is reproducible by anyone,
   byte for byte, from the same seed.</p>
   <div class="cards c4 rv" id="panelcards"></div>
+
+  <div class="models rv">
+    <div class="mhd"><span>with a key, the same panel runs models</span><span class="mtag">optional</span></div>
+    <div class="mgrid">
+      <a class="mcard" href="https://docs.x.ai" target="_blank" rel="noopener">
+        <span class="mname">grok-4.1</span>
+        <span class="mprov">xAI &middot; <code>XAI_API_KEY</code></span>
+        <span class="mlink">docs.x.ai &nearr;</span></a>
+      <a class="mcard" href="https://platform.claude.com/docs/en/home" target="_blank" rel="noopener">
+        <span class="mname">claude-sonnet-4-5</span>
+        <span class="mprov">Anthropic &middot; <code>ANTHROPIC_API_KEY</code></span>
+        <span class="mlink">platform.claude.com &nearr;</span></a>
+      <a class="mcard" href="https://platform.claude.com/docs/en/home" target="_blank" rel="noopener">
+        <span class="mname">claude-opus-4-5</span>
+        <span class="mprov">Anthropic &middot; <code>ANTHROPIC_API_KEY</code></span>
+        <span class="mlink">platform.claude.com &nearr;</span></a>
+    </div>
+    <p class="mnote">With no key set the offline panel still runs, every record says so, and every command
+    works &mdash; that is why <b>npm test</b> needs no network. Put the keys in <b>.env</b> and
+    <b>brier demo --with-models</b> prints the same table with your panel on it. Any OpenAI-compatible
+    endpoint works, the prompt lives in <b>prompts/forecaster.md</b> where you can read it, and the model
+    name plus the round-trip time goes into every sealed record &mdash; so the model half of a claim is at
+    least pinned to a named model on a named day.</p>
+  </div>
 </div></section>
 
 <!-- ══════════════ scoreboard ══════════════ -->
@@ -663,34 +720,49 @@ the chain only proves the file has not moved since.
   </div>
 </div></section>
 
-<!-- ══════════════ install ══════════════ -->
-<section id="install"><div class="wrap">
-  <div class="eyebrow rv"><span class="num">11</span><h2>sixty seconds</h2><span class="ln"></span></div>
-  <div class="two">
-    <pre class="rv"><i># straight from GitHub, no clone</i>
-npm install -g github:Noisyxl/brier
 
-brier <b>doctor</b>      <i>panel, keys, series, chain</i>
-brier <b>demo</b>        <i>200 asked, sealed, settled, scored</i>
-brier <b>score</b>       <i>the board, with four baselines</i>
-brier <b>calibrate</b> hedgehog
-brier <b>ledger</b> --verify</pre>
-    <div>
-      <div class="cmd" style="margin-top:0"><em>$</em><code id="c2">git clone https://github.com/Noisyxl/brier &amp;&amp; cd brier &amp;&amp; npm i</code><button data-copy="c2">copy</button></div>
-      <p class="note">With no key set, the offline panel still runs, every record says so, and every command works.
-      That is why <code style="color:var(--accent)">npm test</code> needs no network, and why someone with no API budget
-      can read, run and check the whole thing. For a model panel, put
-      <code style="color:var(--accent)">XAI_API_KEY</code> or <code style="color:var(--accent)">ANTHROPIC_API_KEY</code>
-      in <code style="color:var(--accent)">.env</code> — any OpenAI-compatible endpoint works.</p>
-      <div id="badges" style="margin-top:20px">
-        <span class="badge"><b>2,376</b> lines of typescript</span>
-        <span class="badge"><b>1,200</b> sealed records</span>
-        <span class="badge"><b>0</b> network calls in tests</span>
-      </div>
+<!-- ══════════════ roadmap ══════════════ -->
+<section id="roadmap"><div class="wrap">
+  <div class="eyebrow rv"><span class="num">11</span><h2>where this goes</h2><span class="ln"></span></div>
+  <div class="road rv">
+
+    <div class="rgroup">
+      <div class="rghd"><i class="s"></i><b>shipped</b><s>in the repository today</s></div>
+      <div class="ritem"><span>The loop, end to end</span>
+        <em>ask &rarr; seal &rarr; wait &rarr; settle &rarr; grade, with the third step unskippable.</em></div>
+      <div class="ritem"><span>Hash-chained ledger</span>
+        <em>append-only, <code style="color:var(--accent)">ledger --verify</code> walks the file and names the first line that breaks.</em></div>
+      <div class="ritem"><span>Proper scoring and the full decomposition</span>
+        <em>Brier, log score, reliability &minus; resolution + uncertainty, and the binning residual almost everyone drops.</em></div>
+      <div class="ritem"><span>Four offline forecasters, four baselines, 66 tests</span>
+        <em>none of which touch a network, so the whole thing is checkable with no API budget.</em></div>
     </div>
-  </div>
-</div></section>
 
+    <div class="rgroup">
+      <div class="rghd"><i class="n"></i><b>next</b><s>being built</s></div>
+      <div class="ritem"><span>Model panels as a first-class run</span>
+        <em>grok and claude answering beside the offline rules, keys optional, every record saying which was which.</em></div>
+      <div class="ritem"><span>Every head anchored on Robinhood Chain</span>
+        <em>the chain proves the file has not moved; the anchor gives it a public timestamp that is not ours.</em></div>
+      <div class="ritem"><span>A watchlist worth opening</span>
+        <em><code style="color:var(--accent)">pending</code> as a real view: what is sealed, what it said, and how long until the world answers.</em></div>
+    </div>
+
+    <div class="rgroup">
+      <div class="rghd"><i class="l"></i><b>later</b><s>direction, not a promise</s></div>
+      <div class="ritem"><span>A hosted scoreboard</span>
+        <em>one page per question and one per forecaster, so a claim can be linked to instead of screenshotted.</em></div>
+      <div class="ritem"><span>Resolvers that read the chain</span>
+        <em>settlement straight from an on-chain number, with the reading recorded like any other source.</em></div>
+      <div class="ritem"><span>Intervals on the board</span>
+        <em>so twenty settled questions stops looking like a result. Small <code style="color:var(--accent)">n</code> should say &ldquo;we do not know yet&rdquo;.</em></div>
+    </div>
+
+  </div>
+  <p class="roadnote">The only thing that turns this into evidence about a model is real questions, a real
+  resolver, and waiting &mdash; and the waiting cannot be shipped. Everything above is ordered by how much it
+  helps with that, not by how quickly it demos.</p>
+</div></section>
 
 <!-- ══════════════ token ══════════════ -->
 <section id="token"><div class="wrap">
@@ -785,18 +857,10 @@ brier <b>ledger</b> --verify</pre>
     <details><summary>Why is the base-rate parrot winning?</summary>
       <p>Because it usually does, and that is the finding. Beating the base rate is hard, most confident
       forecasting does not, and a tool that never showed you the parrot would let you believe otherwise.</p></details>
-    <details><summary>Can the ledger prove when I forecast something?</summary>
-      <p>No, and it says so in three places. It proves the file has not been edited since, and it gives you one
-      short string to publish somewhere that does have a timestamp — which is what the Robinhood Chain anchor is
-      for.</p></details>
     <details><summary>What if my model refuses to give a number?</summary>
       <p>It is recorded as having failed to answer. It is not turned into 0.5, and it is not dropped from the
       denominator either.</p></details>
-    <details><summary>Can I use my own questions?</summary>
-      <p>That is the point. <code style="color:var(--accent)">--kind csv</code> with your own bars, or
-      <code style="color:var(--accent)">--kind manual</code> with a URL and the number you read. Both are recorded
-      so the settlement can be audited.</p></details>
-  </div>
+    </div>
 </div></section>
 
 <footer><div class="wrap">
@@ -837,26 +901,6 @@ document.querySelectorAll('[data-copy]').forEach(b=>{
   });
 });
 
-/* ── the pipeline strip ── */
-const STAGES=[
-  {k:'ASK',    d:'refuses what cannot be settled from a number'},
-  {k:'SEAL',   d:'every panelist answers alone, hash-chained on the spot'},
-  {k:'WAIT',   d:'nothing happens. this is the part that cannot be optimised away'},
-  {k:'SETTLE', d:'one number, one test, fixed before any answer existed'},
-  {k:'GRADE',  d:'proper scoring rules, and the decomposition that says why'}
-];
-$('pipe').innerHTML=STAGES.map((s,i)=>
-  '<div class="st" data-i="'+i+'"><span class="k">'+s.k+'</span><span class="n">0'+(i+1)+'</span>'+
-  '<div class="d">'+s.d+'</div><i class="bar"></i></div>').join('');
-$('loopcards').innerHTML=STAGES.filter((_,i)=>i!==2).concat([STAGES[2]]).slice(0,4).map(()=>'').join('');
-const LOOP=[
-  {n:'01',h:'ask',r:'question.ts',p:'A question is validated, given an id derived from the parts that decide its answer — text, date, source, test — and appended.'},
-  {n:'02',h:'seal',r:'ledger/store.ts',p:'Every panelist answers alone. Each answer is appended with the moment it was produced, and the chain closes over it.'},
-  {n:'03',h:'wait',r:'the method',p:'Nothing happens. This is the part that cannot be optimised away, and the reason the demo exists at all.'},
-  {n:'04',h:'settle → score',r:'resolve/ · score/',p:'A resolver reads one number, applies the question’s own test, and the grading is arithmetic over the file.'}
-];
-$('loopcards').innerHTML=LOOP.map(c=>
-  '<div class="card"><span class="role">'+c.n+' · '+c.r+'</span><h3>'+c.h+'</h3><p>'+c.p+'</p></div>').join('');
 
 /* ── the offline panel ── */
 const PANEL=[
@@ -1564,18 +1608,6 @@ const CONFIG={
   boot();
 })();
 
-/* ── the strip runs a question through, forever ── */
-const sts=[...document.querySelectorAll('.st')];
-let cur=0, held=0;
-function tick(){
-  sts.forEach(s=>{s.classList.remove('on'); s.querySelector('.bar').style.width='0';});
-  const s=sts[cur]; s.classList.add('on');
-  const bar=s.querySelector('.bar');
-  const dwell = cur===2 ? 2600 : 1300;      // waiting takes longer. it always does.
-  requestAnimationFrame(()=>{ bar.style.transition='width '+dwell+'ms linear'; bar.style.width='100%'; });
-  setTimeout(()=>{ cur=(cur+1)%sts.length; tick(); }, dwell);
-}
-if(!RM) tick(); else sts[0].classList.add('on');
 })();
 </script>
 
