@@ -63,6 +63,9 @@ nav a.nl:hover{color:var(--text)}
 nav a.cta{border:1px solid var(--text);color:var(--text);padding:5px 13px;font-size:11.5px;
   letter-spacing:1px;text-decoration:none;flex:none}
 nav a.cta:hover{background:var(--text);color:var(--on)}
+nav a.cta.buy{background:var(--accent);border-color:var(--accent);color:var(--on);font-weight:500}
+nav a.cta.buy:hover{background:#fff;border-color:#fff}
+nav a.cta.off{opacity:.35;pointer-events:none}
 @media(max-width:900px){nav a.nl{display:none}.chip s{display:none}}
 
 .wrap{max-width:var(--wrap);margin:0 auto;padding:0 22px}
@@ -309,6 +312,8 @@ pre{max-width:100%}
 .cabox code{flex:1;font-size:12.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text)}
 .cabox code.empty{color:var(--accent)}
 .cabox button{flex:none}
+.launch{margin:14px 0 0;color:var(--muted);font-size:12px;letter-spacing:.2px}
+.launch b{color:var(--accent);font-weight:400}
 @media(max-width:820px){.tokgrid{grid-template-columns:1fr}}
 
 /* ── models ── */
@@ -428,6 +433,7 @@ footer a:hover{color:var(--accent);border-color:var(--accent)}
   <a class="nl" href="#roadmap">roadmap</a>
   <a class="nl" href="#token">token</a>
   <a class="nl" href="#chart">chart</a>
+  <a class="cta buy off" id="navBuy" href="#token">BUY</a>
   <a class="cta" href="https://github.com/Noisyxl/brier" target="_blank" rel="noopener">GITHUB</a>
 </nav>
 
@@ -486,9 +492,9 @@ footer a:hover{color:var(--accent);border-color:var(--accent)}
   <code style="color:var(--accent)">ledger --verify</code>.</p>
 
   <div class="btns">
-    <a class="btn pri" href="#room"><i></i>watch the room</a>
+    <a class="btn" href="#room">watch the room</a>
     <a class="btn" href="#board">the scoreboard</a>
-    <a class="btn" href="#token">$BRIER on Robinhood Chain</a>
+    <a class="btn pri" id="heroBuy" href="#token"><i></i>buy $BRIER</a>
     <a class="btn ghost" href="https://github.com/Noisyxl/brier" target="_blank" rel="noopener">github</a>
   </div>
 
@@ -786,7 +792,8 @@ the chain only proves the file has not moved since.
         <a class="btn ghost" id="lnTg" href="#">telegram</a>
       </div>
 
-      <p class="note" style="margin-top:22px">The mark is a community token on Robinhood Chain, and the same chain
+      <p class="launch">BUY opens the <b>Pons</b> launchpad for this contract on Robinhood Chain.</p>
+      <p class="note" style="margin-top:14px">The mark is a community token on Robinhood Chain, and the same chain
       is where a ledger head gets its timestamp. The repository itself holds nothing, trades nothing and has no
       market in it &mdash; that is stated in the code, in the docs and in
       <a href="https://github.com/Noisyxl/brier/blob/main/docs/SAFETY.md" target="_blank" rel="noopener"
@@ -1037,10 +1044,17 @@ const CONFIG={
 
   network:'robinhood',   // the geckoterminal / dexscreener network slug
   pool:'',               // optional: the pair address, if you already know it
-  buy:'',                // optional: a direct swap link
+
+  /* BUY goes to the Pons launchpad, assembled from the CA above:
+        https://www.ponsfamily.com/launchpad/<ca>
+     Set `buy` only to point it somewhere else entirely. */
+  launchpad:'https://www.ponsfamily.com/launchpad/',
+  buyLabel:'buy on pons',
+  buy:'',                // optional override
   explorer:'',           // optional: the token page on the chain explorer
   x:'', telegram:''
 };
+const BUY_URL = CONFIG.buy || (CONFIG.ca ? (CONFIG.launchpad||'')+CONFIG.ca : '');
 (function applyConfig(){
   const T=CONFIG.ticker||'$BRIER';
   document.querySelectorAll('[data-tkr]').forEach(e=>e.textContent=T);
@@ -1055,19 +1069,24 @@ const CONFIG={
     if(CONFIG.ca){ ca.textContent=CONFIG.ca; ca.classList.remove('empty'); }
     else { ca.textContent='NOT DEPLOYED YET · PASTE YOUR CA IN THE CONFIG'; ca.classList.add('empty'); }
   });
-  const bt=$('lnBuyTop');
-  if(bt){ if(CONFIG.buy){ bt.href=CONFIG.buy; bt.target='_blank'; bt.rel='noopener'; }
-          else { bt.href='#token'; } }
   const ct=$('caTopCopy');
   if(ct) ct.addEventListener('click',()=>{
     if(!CONFIG.ca) return;
     navigator.clipboard&&navigator.clipboard.writeText(CONFIG.ca).then(()=>{
       ct.textContent='copied'; setTimeout(()=>ct.textContent='copy',1400); },()=>{});
   });
-  [['lnBuy','buy'],['lnExp','explorer'],['lnX','x'],['lnTg','telegram']]
+  [['lnExp','explorer'],['lnX','x'],['lnTg','telegram']]
     .forEach(([id,k])=>{ const el=$(id); if(!el)return;
-      if(CONFIG[k]){ el.href=CONFIG[k]; el.target='_blank'; el.rel='noopener'; }
+      if(CONFIG[k]){ el.href=CONFIG[k]; el.target='_blank'; el.rel='noopener'; el.classList.remove('off'); }
       else { el.href='#token'; el.classList.add('off'); }});
+  /* every BUY on the page opens the launchpad for this contract */
+  ['lnBuy','lnBuyTop','navBuy','heroBuy'].forEach(id=>{
+    const el=$(id); if(!el)return;
+    if(BUY_URL){ el.href=BUY_URL; el.target='_blank'; el.rel='noopener'; el.classList.remove('off'); }
+    else { el.href='#token'; el.classList.add('off'); }
+  });
+  const lb=$('lnBuy'); if(lb) lb.innerHTML='<i></i>'+(CONFIG.buyLabel||'buy');
+  const hb=$('heroBuy'); if(hb) hb.innerHTML='<i></i>buy '+T;
   const cc=$('caCopy');
   if(cc) cc.addEventListener('click',()=>{
     if(!CONFIG.ca) return;
