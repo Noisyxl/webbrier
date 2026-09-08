@@ -444,10 +444,8 @@ footer a:hover{color:var(--accent);border-color:var(--accent)}
   <div class="cabar">
     <span class="t" id="caTkr">$BRIER</span>
     <span class="ch"><i></i>Robinhood Chain</span>
-    <span class="lb">CA</span>
-    <code id="caTop" class="empty">NOT DEPLOYED YET &middot; PASTE YOUR CA IN THE CONFIG</code>
+    <code id="caTop" class="empty">TOKEN NOT LIVE YET &middot; THE RECEIPT IS THE PRODUCT</code>
     <span class="acts">
-      <button class="btn sm" id="caTopCopy">copy</button>
       <a class="btn sm pri" id="lnBuyTop" href="#token">buy</a>
     </span>
   </div>
@@ -778,10 +776,9 @@ the chain only proves the file has not moved since.
       <div class="tokname" id="tokName">$BRIER</div>
       <div class="tokchain">on <b id="tokChain">ROBINHOOD CHAIN</b> &middot; block <span id="tokBlk">8,412,977</span></div>
 
-      <div class="calabel">contract address</div>
+      <div class="calabel">status</div>
       <div class="cabox">
-        <code id="caText" class="empty">NOT DEPLOYED YET &middot; PASTE YOUR CA IN THE CONFIG</code>
-        <button class="btn sm" id="caCopy">copy</button>
+        <code id="caText" class="empty">NOT LIVE YET</code>
       </div>
 
       <div class="btns">
@@ -792,7 +789,7 @@ the chain only proves the file has not moved since.
         <a class="btn ghost" id="lnTg" href="#">telegram</a>
       </div>
 
-      <p class="launch">BUY opens the <b>Pons</b> launchpad for this contract on Robinhood Chain.</p>
+      <p class="launch">BUY opens the <b>Pons</b> launchpad on Robinhood Chain.</p>
       <p class="note" style="margin-top:14px">The mark is a community token on Robinhood Chain, and the same chain
       is where a ledger head gets its timestamp. The repository itself holds nothing, trades nothing and has no
       market in it &mdash; that is stated in the code, in the docs and in
@@ -804,12 +801,12 @@ the chain only proves the file has not moved since.
       <div class="poolrow">
         <div><span>network</span><b class="a" id="pNet">ROBINHOOD CHAIN</b></div>
         <div><span>pair</span><b id="pPair">&mdash;</b></div>
-        <div><span>pool</span><b class="dim" id="pPool">resolves from the CA</b></div>
+        <div><span>pool</span><b class="dim" id="pPool">not connected</b></div>
         <div><span>dex</span><b class="dim" id="pDex">&mdash;</b></div>
-        <div><span>status</span><b class="dim" id="pStat">waiting for a contract address</b></div>
+        <div><span>status</span><b class="dim" id="pStat">not live yet</b></div>
       </div>
-      <p class="note" style="margin-top:20px">Paste the contract address once, in the config at the bottom of
-      this file. The pool, the chart, the price and every link resolve themselves from it.</p>
+      <p class="note" style="margin-top:20px">Nothing is deployed yet. When the mark is live on a pool the
+      indexers can see, the pair, the price and the chart below fill themselves in.</p>
     </div>
   </div>
 </div></section>
@@ -835,9 +832,8 @@ the chain only proves the file has not moved since.
     <iframe id="gt" title="live pool chart" allow="clipboard-write" loading="lazy"></iframe>
     <div class="fb" id="chFb">
       <span class="k" id="fbK">no pool connected</span>
-      <p id="fbP">Paste the token contract address in the config at the bottom of this file and the chart
-      wires itself up. If an address is already set and this is still dark, the embed is being blocked here
-      &mdash; open the pool with one of the links below.</p>
+      <p id="fbP">The tape starts the moment there is a pool to read. Until then this frame stays dark
+      on purpose &mdash; a chart with nothing behind it is the one thing this project will not print.</p>
     </div>
   </div>
 
@@ -1037,10 +1033,10 @@ const CONFIG={
   ticker:'$BRIER',
   chain:'ROBINHOOD CHAIN',
 
-  /* ── paste the contract address here and everything below wires itself up:
-        the pool is looked up, the GeckoTerminal chart loads, the price,
-        liquidity, volume and every link fill in. Nothing else is required. ── */
-  ca:'0xB06B1E58F5ba2a3df1AB74C01cB2A44C5395B3be',
+  /* ── one line, at launch: put the token address between the quotes and the
+        whole page wires itself up — the pool is looked up, the chart loads,
+        price, liquidity, volume and every link fill in. Nothing else. ── */
+  ca:'',
 
   network:'robinhood',   // the geckoterminal / dexscreener network slug
   pool:'',               // optional: the pair address, if you already know it
@@ -1054,7 +1050,7 @@ const CONFIG={
   explorer:'',           // optional: the token page on the chain explorer
   x:'', telegram:''
 };
-const BUY_URL = CONFIG.buy || (CONFIG.ca ? (CONFIG.launchpad||'')+CONFIG.ca : '');
+const BUY_URL = CONFIG.buy || (CONFIG.ca ? (CONFIG.launchpad||'')+CONFIG.ca : (CONFIG.launchpad||''));
 (function applyConfig(){
   const T=CONFIG.ticker||'$BRIER';
   document.querySelectorAll('[data-tkr]').forEach(e=>e.textContent=T);
@@ -1067,9 +1063,10 @@ const BUY_URL = CONFIG.buy || (CONFIG.ca ? (CONFIG.launchpad||'')+CONFIG.ca : ''
   ['caText','caTop'].forEach(id=>{
     const ca=$(id); if(!ca) return;
     if(CONFIG.ca){ ca.textContent=CONFIG.ca; ca.classList.remove('empty'); }
-    else { ca.textContent='NOT DEPLOYED YET · PASTE YOUR CA IN THE CONFIG'; ca.classList.add('empty'); }
+    else { ca.classList.add('empty'); }
   });
   const ct=$('caTopCopy');
+  if(ct && !CONFIG.ca) ct.style.display='none';
   if(ct) ct.addEventListener('click',()=>{
     if(!CONFIG.ca) return;
     navigator.clipboard&&navigator.clipboard.writeText(CONFIG.ca).then(()=>{
@@ -1088,6 +1085,7 @@ const BUY_URL = CONFIG.buy || (CONFIG.ca ? (CONFIG.launchpad||'')+CONFIG.ca : ''
   const lb=$('lnBuy'); if(lb) lb.innerHTML='<i></i>'+(CONFIG.buyLabel||'buy');
   const hb=$('heroBuy'); if(hb) hb.innerHTML='<i></i>buy '+T;
   const cc=$('caCopy');
+  if(cc && !CONFIG.ca) cc.style.display='none';
   if(cc) cc.addEventListener('click',()=>{
     if(!CONFIG.ca) return;
     navigator.clipboard&&navigator.clipboard.writeText(CONFIG.ca).then(()=>{
@@ -1478,7 +1476,7 @@ const BUY_URL = CONFIG.buy || (CONFIG.ca ? (CONFIG.launchpad||'')+CONFIG.ca : ''
 
 
 /* ══════════════════════════════════════════════════════════════
-   the live chart — one contract address in, a real pool out.
+   the live chart — one address in, at launch, and a real pool out.
    GeckoTerminal is asked first, because it is the same source the
    embed below is rendered from. DexScreener is the fallback.
    ══════════════════════════════════════════════════════════════ */
@@ -1594,7 +1592,7 @@ const BUY_URL = CONFIG.buy || (CONFIG.ca ? (CONFIG.launchpad||'')+CONFIG.ca : ''
 
   async function boot(){
     if(!CONFIG.ca && !CONFIG.pool){
-      set('pStat','waiting for a contract address');
+      set('pStat','not live yet');
       link('lkExp',CONFIG.explorer||null);
       return;
     }
