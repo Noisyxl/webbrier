@@ -85,6 +85,33 @@ section:first-of-type{border-top:none}
 
 /* ── hero ── */
 #hero{padding:132px 0 66px;border-top:none}
+#hero .wrap{position:relative}
+#parrot{position:absolute;right:0;top:112px;width:min(30vw,320px);z-index:3}
+.parrot{display:flex;flex-direction:column;align-items:center;gap:10px;position:relative}
+.pCv{display:block;width:100%;height:auto;cursor:pointer;image-rendering:pixelated;
+  filter:drop-shadow(0 0 28px rgba(255,225,10,.14));will-change:transform;position:relative;z-index:40}
+.pCv.flying{cursor:default}
+.pCv:focus-visible{outline:1px solid var(--accent);outline-offset:6px}
+.pFoot{display:flex;gap:12px;align-items:center;font-size:11px;letter-spacing:.6px;color:var(--dim)}
+.pSound{background:none;border:1px solid var(--line);color:var(--muted);font:inherit;font-size:11px;
+  padding:3px 9px;cursor:pointer}
+.pSound:hover{border-color:var(--accent);color:var(--accent)}
+.pBubble{position:absolute;right:0;top:6%;transform:translateY(-100%);max-width:230px;z-index:41;
+  background:var(--accent);color:var(--on);font-size:13px;font-weight:500;letter-spacing:.3px;
+  padding:7px 11px;opacity:0;transition:opacity .15s,transform .15s;pointer-events:none;white-space:nowrap}
+.pBubble.on{opacity:1;transform:translateY(-112%)}
+.pBubble::after{content:'';position:absolute;left:26px;bottom:-7px;border:7px solid transparent;
+  border-bottom:0;border-top-color:var(--accent)}
+/* the one in the footer, perched beside the last line */
+.fbird{display:flex;align-items:flex-end;gap:22px}
+.parrot.small{width:118px;flex:none}
+.parrot.small .pBubble{right:auto;left:40%;font-size:12px}
+@media(max-width:1240px){
+  #parrot{position:relative;right:auto;top:auto;width:min(58vw,240px);margin:0 auto 18px}
+  #parrot .pBubble{right:auto;left:55%}
+}
+@media(max-width:560px){.parrot.small{width:86px}.fbird{gap:14px}}
+
 #wordmark{display:flex;align-items:center;gap:min(3.4vw,34px);margin-bottom:6px}
 #sig{width:min(11vw,104px);height:min(11vw,104px);flex:none}
 #sig rect{fill:var(--accent)}
@@ -441,6 +468,14 @@ footer a:hover{color:var(--accent);border-color:var(--accent)}
 
 <!-- ══════════════ hero ══════════════ -->
 <section id="hero"><div class="wrap">
+  <div id="parrot" class="parrot">
+    <div class="pBubble" aria-live="polite"></div>
+    <canvas class="pCv" role="button" tabindex="0" aria-label="The parrot — click it and it takes off"></canvas>
+    <div class="pFoot">
+      <span class="pHint">click the parrot</span>
+      <button class="pSound" type="button" aria-pressed="true">sound: on</button>
+    </div>
+  </div>
   <div class="cabar">
     <span class="t" id="caTkr">$BRIER</span>
     <span class="ch"><i></i>Robinhood Chain</span>
@@ -868,7 +903,13 @@ the chain only proves the file has not moved since.
 
 <footer><div class="wrap">
   <div class="fgrid">
-    <div class="big">Seal it before you know,<br>or it does not count.</div>
+    <div class="fbird">
+      <div id="parrot2" class="parrot small">
+        <div class="pBubble" aria-live="polite"></div>
+        <canvas class="pCv" role="button" tabindex="0" aria-label="The parrot again — click it"></canvas>
+      </div>
+      <div class="big">Seal it before you know,<br>or it does not count.</div>
+    </div>
     <div class="lnks">
       <a href="https://github.com/Noisyxl/brier" target="_blank" rel="noopener">github</a>
       <a href="https://github.com/Noisyxl/brier/blob/main/docs/SCORING.md" target="_blank" rel="noopener">scoring</a>
@@ -1050,7 +1091,8 @@ const CONFIG={
   explorer:'',           // optional: the token page on the chain explorer
   x:'', telegram:''
 };
-const BUY_URL = CONFIG.buy || (CONFIG.ca ? (CONFIG.launchpad||'')+CONFIG.ca : (CONFIG.launchpad||''));
+/* no address, no buy link — a bare launchpad page would send people to the wrong token */
+const BUY_URL = CONFIG.buy || (CONFIG.ca ? (CONFIG.launchpad||'')+CONFIG.ca : '');
 (function applyConfig(){
   const T=CONFIG.ticker||'$BRIER';
   document.querySelectorAll('[data-tkr]').forEach(e=>e.textContent=T);
@@ -1091,6 +1133,288 @@ const BUY_URL = CONFIG.buy || (CONFIG.ca ? (CONFIG.launchpad||'')+CONFIG.ca : (C
     navigator.clipboard&&navigator.clipboard.writeText(CONFIG.ca).then(()=>{
       cc.textContent='copied'; setTimeout(()=>cc.textContent='copy',1400); },()=>{});
   });
+})();
+
+/* ══════════════════════════════════════════════════════════════
+   the parrot — drawn cell for cell from the artwork, 35 × 41.
+   Y yellow · K beak · W the glint in its eye. It watches the
+   pointer, blinks, bobs, and squawks when you click it — the
+   crest goes up and the beak opens. Every sound is synthesised
+   here; there is no audio file.
+   ══════════════════════════════════════════════════════════════ */
+(function parrots(){
+  if(!document.querySelector('.pCv')) return;
+  const G=[
+  '..............YY...................',
+  '..............YYYY.................',
+  '...............YYYYY...............',
+  '...........YY....YYYYYY............',
+  '...........YYY.....YYYYYYYY........',
+  '............YYYYYYYYYYYYYYYYY......',
+  '.............YYYYY.YYYYYYYYYYY.....',
+  '.............YYYY.YYYY...YYYYYY....',
+  '.................YYYY..YYYYYYYY....',
+  '.............YY.YYYYY.YYYYYYYYY....',
+  '.............Y..YYYYYYY...YYY......',
+  '...............YYYYYYY..W.YY..KKK..',
+  '...............YYYYYYY....Y..KKKKK.',
+  '...............YYYYYYY....Y.KKKKKKK',
+  '...............YYYYYYYY..Y..KKKKKKK',
+  '................YYYYYYYYYY.K.KKKKKK',
+  '..................YYYYYYYY.K...KKKK',
+  '..............YYYY...YYYYY.KKK..KKK',
+  '.............YYYYY....YYYY......KK.',
+  '............YYYYYYYYY..YYYY........',
+  '...........YYY...YYYY..YYYYYY......',
+  '...........Y.....YYYYY.YYYYYY......',
+  '...........Y..YYY...YY.YYYYYYY.....',
+  '..........Y...YYY...YY.YYYYYYY.....',
+  '.........Y..YYY.....YY.YYYYYYY.....',
+  '............YYY.....YY.YYYYYYY.....',
+  '..........YYY.....YYY..YYYYYYY.....',
+  '........YYYYY.....YY..YYYYYYY......',
+  '......YYYYY.....YYY..YYYYYYYY......',
+  '......YYY....YYYYY..YYYYYYYY.......',
+  '...........YYYYY...YYYYYYYY........',
+  '........YYYYYY....YYYYYYYY.........',
+  '......YYYYY.....YYYYYYYYY..........',
+  '...YYYYY.......YYYYYYYY............',
+  '.YYYYY...YYY...YYYYY...............',
+  'YYYY...YYYY.....YYY...YY...........',
+  '.....YYYYY.......Y.....Y...........',
+  '.....YYYY........Y.....Y...........',
+  '...YYYYY.......YYYY...YYYYYY.......',
+  '..YYYY........YY..YYY..Y..YY.......',
+  '..............Y....YY......Y.......'
+  ];
+  const GW=G[0].length, GH=G.length;
+  const INK={Y:'#FFE10A',K:'#2A2A2A'};
+  const EYE=new Set(['22,11','22,12','22,13','23,10','23,11','23,12','23,13','23,14',
+                     '24,10','24,11','24,12','24,13','24,14','25,10','25,11','25,12','25,13']);
+  /* the crest is the spikes above the head; the jaw is the lower mandible;
+     the wing is the fan of long strokes down the left side of the body */
+  const isCrest=(x,y)=> y<=3 && x<=18;
+  const isJaw  =(x,y)=> G[y][x]==='K' && x<=29 && y>=15;
+  const isWing =(x,y)=> y>=17 && y<=30 && x<=17;
+  const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ── sound, shared by every bird on the page ────────────────── */
+  let AC=null, soundOn=true, unlocked=false;
+  function ensure(){
+    if(!AC){ const C=window.AudioContext||window.webkitAudioContext; if(!C) return null; AC=new C(); }
+    if(AC.state==='suspended') AC.resume();
+    unlocked=true; return AC;
+  }
+  function noise(dur){
+    const b=AC.createBuffer(1,Math.ceil(AC.sampleRate*dur),AC.sampleRate), d=b.getChannelData(0);
+    for(let i=0;i<d.length;i++) d[i]=Math.random()*2-1;
+    const s=AC.createBufferSource(); s.buffer=b; return s;
+  }
+  /* one harsh syllable: a sawtooth dragged through a narrow band, with a
+     fast wobble and a scrape of noise — that is most of a parrot */
+  function syllable(t0,f0,f1,dur,loud){
+    const o=AC.createOscillator(), lfo=AC.createOscillator(), lg=AC.createGain();
+    const bp=AC.createBiquadFilter(), g=AC.createGain(), nz=noise(dur), nf=AC.createBiquadFilter(), ng=AC.createGain();
+    o.type='sawtooth';
+    o.frequency.setValueAtTime(f0,t0);
+    o.frequency.exponentialRampToValueAtTime(f1,t0+dur*.55);
+    o.frequency.exponentialRampToValueAtTime(f0*.8,t0+dur);
+    lfo.frequency.value=38+Math.random()*14; lg.gain.value=f0*.07;
+    lfo.connect(lg); lg.connect(o.frequency);
+    bp.type='bandpass'; bp.frequency.value=2200; bp.Q.value=2.4;
+    g.gain.setValueAtTime(0.0001,t0);
+    g.gain.exponentialRampToValueAtTime(loud,t0+.015);
+    g.gain.exponentialRampToValueAtTime(loud*.55,t0+dur*.6);
+    g.gain.exponentialRampToValueAtTime(0.0001,t0+dur);
+    nf.type='highpass'; nf.frequency.value=3000;
+    ng.gain.setValueAtTime(loud*.35,t0); ng.gain.exponentialRampToValueAtTime(0.0001,t0+dur*.5);
+    o.connect(bp); bp.connect(g); g.connect(AC.destination);
+    nz.connect(nf); nf.connect(ng); ng.connect(AC.destination);
+    o.start(t0); lfo.start(t0); nz.start(t0);
+    o.stop(t0+dur+.02); lfo.stop(t0+dur+.02); nz.stop(t0+dur);
+  }
+  function whistle(t0,f0,f1,dur,loud){
+    const o=AC.createOscillator(), g=AC.createGain();
+    o.type='sine';
+    o.frequency.setValueAtTime(f0,t0); o.frequency.exponentialRampToValueAtTime(f1,t0+dur);
+    g.gain.setValueAtTime(0.0001,t0); g.gain.exponentialRampToValueAtTime(loud,t0+.02);
+    g.gain.exponentialRampToValueAtTime(0.0001,t0+dur);
+    o.connect(g); g.connect(AC.destination); o.start(t0); o.stop(t0+dur+.02);
+  }
+  /* wingbeats: soft low thumps of filtered noise */
+  function flaps(count,gap){
+    if(!soundOn || !ensure()) return;
+    let t=AC.currentTime+.01;
+    for(let i=0;i<count;i++){
+      const nz=noise(.07), lp=AC.createBiquadFilter(), g=AC.createGain();
+      lp.type='lowpass'; lp.frequency.value=700;
+      g.gain.setValueAtTime(.12,t); g.gain.exponentialRampToValueAtTime(0.0001,t+.07);
+      nz.connect(lp); lp.connect(g); g.connect(AC.destination); nz.start(t); nz.stop(t+.08);
+      t+=gap;
+    }
+  }
+  function squawk(){
+    if(!soundOn || !ensure()) return;
+    const t=AC.currentTime+.01;
+    syllable(t,900,1500,.20,.22); syllable(t+.24,1100,1700,.16,.18);
+  }
+  function chirp(){
+    if(!soundOn || !ensure()) return;
+    const t=AC.currentTime+.01;
+    whistle(t,1900,3100,.09,.08); whistle(t+.12,2200,3400,.08,.07);
+  }
+  function talk(line){
+    if(!soundOn || !ensure()) return;
+    const syl=Math.max(2,Math.min(6,line.split(/[\s-]+/).length+1));
+    let t=AC.currentTime+.01;
+    for(let i=0;i<syl;i++){
+      const f=800+Math.random()*700;
+      syllable(t,f,f*1.35,.11+Math.random()*.05,.16);
+      t+=.15+Math.random()*.05;
+    }
+  }
+  document.querySelectorAll('.pSound').forEach(btn=>btn.addEventListener('click',()=>{
+    soundOn=!soundOn;
+    document.querySelectorAll('.pSound').forEach(b=>{
+      b.textContent='sound: '+(soundOn?'on':'off'); b.setAttribute('aria-pressed',soundOn); });
+    if(soundOn){ ensure(); chirp(); }
+  }));
+
+  const LINES=['SQUAWK!','keep the receipt!','65%! 65%!','base rate!','never wrong!',
+               'polly wants a receipt','seal it first!','who said 91%?','brier! brier!'];
+  let li=0;
+  const pointer={x:-1,y:-1};
+  addEventListener('pointermove',e=>{ pointer.x=e.clientX; pointer.y=e.clientY; },{passive:true});
+
+  /* ── one bird ─────────────────────────────────────────────── */
+  function bird(root){
+    const cv=root.querySelector('.pCv'), ctx=cv.getContext('2d');
+    const bub=root.querySelector('.pBubble'), hint=root.querySelector('.pHint');
+    const S={blink:0,bob:0,crest:0,jaw:0,flap:0,look:{x:0,y:0},fly:null,face:1};
+    let cell=8, bubT=0;
+    function size(){
+      const w=cv.getBoundingClientRect().width||300;
+      const dp=Math.min(2,devicePixelRatio||1);
+      cell=Math.max(2,Math.floor(w*dp/(GW+2)));
+      cv.width=(GW+2)*cell; cv.height=(GH+5)*cell;
+    }
+    size(); addEventListener('resize',size);
+
+    function draw(){
+      ctx.clearRect(0,0,cv.width,cv.height);
+      const bob=Math.round(S.bob), crest=S.crest>0.5, jaw=Math.round(S.jaw), flap=Math.round(S.flap);
+      ctx.save();
+      if(S.face<0){ ctx.translate(cv.width,0); ctx.scale(-1,1); }   /* it faces the way it flies */
+      for(let y=0;y<GH;y++){
+        const row=G[y];
+        for(let x=0;x<GW;x++){
+          let ch=row[x];
+          if(ch==='W') ch='.';
+          if(EYE.has(x+','+y) && S.blink>0 && y<=12) ch='Y';
+          if(ch==='.') continue;
+          /* the wing beats: its strokes lift, the further from the body the more */
+          const lift=isWing(x,y) ? Math.round(flap*(1-(x/17))*1.6) : 0;
+          const dy=3-bob+(isJaw(x,y)?jaw:0)-lift;
+          ctx.fillStyle=INK[ch];
+          ctx.fillRect((x+1)*cell,(y+dy)*cell,cell,cell);
+          if(crest && isCrest(x,y) && (y===0 || G[y-1][x]==='.'))
+            ctx.fillRect((x+1)*cell,(y+dy-1)*cell,cell,cell);
+        }
+      }
+      if(S.blink<=0){
+        const gx=24+Math.max(-1,Math.min(0,Math.round(S.look.x*S.face))),
+              gy=11+Math.max(0,Math.min(2,Math.round(S.look.y+1)));
+        ctx.fillStyle='#fff';
+        ctx.fillRect((gx+1)*cell,(gy+3-bob)*cell,cell,cell);
+      }
+      ctx.restore();
+    }
+
+    function say(txt){
+      if(!bub) return;
+      bub.textContent=txt; bub.classList.add('on');
+      clearTimeout(bubT); bubT=setTimeout(()=>bub.classList.remove('on'),1900);
+    }
+
+    /* ── flight: up off the perch, a loop over the page, back down ── */
+    function takeOff(){
+      if(S.fly) return;
+      const r=cv.getBoundingClientRect();
+      /* how far it can go without leaving the window */
+      const roomL=r.left-12, roomR=innerWidth-r.right-12;
+      const dir = roomL>roomR ? -1 : 1;
+      const A=Math.max(60,Math.min(420,(dir<0?roomL:roomR)+r.width*.4));
+      const B=Math.max(60,Math.min(190,r.top+r.height*.25));
+      S.fly={t0:performance.now(),dur:RM?0:2900,dir,A,B};
+      cv.classList.add('flying');
+      bub && bub.classList.remove('on');
+      S.crest=2;
+      squawk(); flaps(10,.26);
+      if(hint) hint.textContent='again';
+    }
+    function land(){
+      cv.style.transform='';
+      cv.classList.remove('flying');
+      S.fly=null; S.face=1; S.flap=0;
+      const line=LINES[li++%LINES.length];
+      say(line); S.crest=2;
+      S.jaw=1; setTimeout(()=>S.jaw=0,180); setTimeout(()=>S.jaw=1,300); setTimeout(()=>S.jaw=0,520);
+      if(line!=='SQUAWK!') talk(line); else squawk();
+    }
+    function flight(now){
+      const F=S.fly, u=Math.min(1,(now-F.t0)/Math.max(1,F.dur));
+      /* out and up, a turn at the far end, a dip, then home — sin carries it
+         out and back, the second harmonic gives the loop its swoop */
+      const e=Math.sin(Math.PI*u);
+      const x=F.dir*F.A*e*(1+.18*Math.sin(3*Math.PI*u));
+      const y=-F.B*e + 38*Math.sin(2*Math.PI*u);
+      /* which way is it moving right now — that is where it looks */
+      const dx=F.dir*F.A*Math.PI*Math.cos(Math.PI*u);
+      S.face = dx>=0 ? 1 : -1;
+      const tilt=Math.max(-14,Math.min(14,-Math.cos(Math.PI*u)*12*F.dir));
+      cv.style.transform=`translate(${x.toFixed(1)}px,${y.toFixed(1)}px) rotate(${tilt.toFixed(1)}deg)`;
+      S.flap=Math.sin(now/55)>0?2:-1;
+      if(u>=1) land();
+    }
+
+    cv.addEventListener('click',takeOff);
+    cv.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); takeOff(); }});
+    cv.addEventListener('pointerenter',()=>{ if(unlocked && !S.fly) chirp(); S.crest=Math.max(S.crest,1); });
+
+    let nextBlink=performance.now()+1500+Math.random()*2500;
+    function loop(now){
+      if(S.fly) flight(now);
+      else{
+        if(!RM) S.bob=(Math.sin(now/520)>0.72)?1:0;
+        const r=cv.getBoundingClientRect();
+        if(pointer.x>=0){
+          const ex=r.left+r.width*.70, ey=r.top+r.height*.30;
+          const dx=pointer.x-ex, dy=pointer.y-ey, d=Math.hypot(dx,dy)||1;
+          S.look.x=dx/d*1.2; S.look.y=dy/d*1.2;
+        }
+      }
+      S.crest*=0.985; if(S.crest<0.4) S.crest=0;
+      if(now>nextBlink){ S.blink=7; nextBlink=now+2200+Math.random()*3600; }
+      if(S.blink>0) S.blink--;
+      draw();
+      requestAnimationFrame(loop);
+    }
+    requestAnimationFrame(loop);
+    return {chirp:()=>{ if(!S.fly){ chirp(); S.crest=1; } }, cv};
+  }
+
+  const birds=[...document.querySelectorAll('.parrot')].map(bird);
+
+  /* now and then one of them talks to itself — once you have let it make noise */
+  (function ambient(){
+    setTimeout(()=>{
+      if(unlocked && soundOn && !document.hidden){
+        const seen=birds.filter(b=>{ const r=b.cv.getBoundingClientRect(); return r.bottom>0 && r.top<innerHeight; });
+        if(seen.length) seen[Math.floor(Math.random()*seen.length)].chirp();
+      }
+      ambient();
+    },14000+Math.random()*12000);
+  })();
 })();
 
 /* ══════════════════════════════════════════════════════════════
