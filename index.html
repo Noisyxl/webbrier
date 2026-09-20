@@ -323,6 +323,33 @@ pre{max-width:100%}
 .vizbar .m b.a{color:var(--accent)}
 .vizbar .ctl{margin-left:auto;display:flex;gap:8px}
 #room-cv{display:block;width:100%;height:400px;image-rendering:pixelated;image-rendering:crisp-edges}
+/* ── the burn ── */
+.burnhead{margin-bottom:22px}
+.burnbig{font-size:clamp(22px,3.4vw,40px);line-height:1.2;margin:0 0 12px;letter-spacing:-.01em}
+.burnbig b,.burnbig span{color:var(--accent);font-weight:500}
+.burnbox{border:1px solid var(--line);background:var(--panel);padding:clamp(18px,3vw,30px)}
+.burnlab{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+.burnclock{display:flex;align-items:flex-start;gap:clamp(6px,1.2vw,14px);flex-wrap:wrap}
+.burnclock .u{display:flex;flex-direction:column;align-items:center;gap:8px}
+.burnclock .d{display:flex;gap:5px}
+.burnclock .d b{font-weight:500;font-size:clamp(40px,8vw,92px);line-height:1;color:var(--text);
+  background:var(--sunk);border:1px solid var(--line);padding:10px 12px;min-width:1.05em;text-align:center;
+  font-variant-numeric:tabular-nums;transition:background .15s,color .15s}
+.burnclock .d b.hit{background:var(--accent);color:var(--on);border-color:var(--accent)}
+.burnclock s{text-decoration:none;font-size:10.5px;letter-spacing:2px;text-transform:uppercase;color:var(--dim)}
+.burnclock .sep{font-size:clamp(34px,6vw,72px);line-height:1.2;color:var(--dim)}
+.burnbar{height:8px;background:var(--sunk);border:1px solid var(--line);margin:22px 0 8px;position:relative}
+.burnbar i{position:absolute;left:0;top:0;bottom:0;width:0;background:var(--accent);transition:width .3s linear}
+.burnrow{display:flex;justify-content:space-between;gap:12px;font-size:12px;color:var(--muted);
+  font-variant-numeric:tabular-nums}
+.burnfacts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;margin-top:22px;
+  background:var(--line);border:1px solid var(--line)}
+.burnfacts div{background:var(--panel);padding:12px 14px;min-width:0}
+.burnfacts u{display:block;text-decoration:none;font-size:10.5px;letter-spacing:1.6px;text-transform:uppercase;
+  color:var(--dim);margin-bottom:5px}
+.burnfacts b{font-weight:500;font-size:15px;color:var(--text)}
+.burnfacts b.dash{color:var(--dim)}
+@media(max-width:760px){.burnfacts{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .floor{margin:0;border:1px solid var(--line);background:#000;position:relative}
 .floor video{display:block;width:100%;height:auto;background:#000}
 .floorplate{position:absolute;inset:0;margin:auto;width:max-content;height:max-content;display:none;
@@ -465,6 +492,7 @@ footer a:hover{color:var(--accent);border-color:var(--accent)}
   <a class="nl" href="#cal">calibration</a>
   <a class="nl" href="#roadmap">roadmap</a>
   <a class="nl" href="#token">token</a>
+  <a class="nl" href="#burn">burn</a>
   <a class="nl" href="#chart">chart</a>
   <a class="cta buy off" id="navBuy" href="#token">BUY</a>
   <a class="cta" href="https://github.com/Noisyxl/brier" target="_blank" rel="noopener">GITHUB</a>
@@ -842,9 +870,44 @@ the chain only proves the file has not moved since.
 </div></section>
 
 
+<!-- ══════════════ the burn ══════════════ -->
+<section id="burn"><div class="wrap">
+  <div class="eyebrow rv"><span class="num">13</span><h2>the burn</h2><span class="ln"></span></div>
+
+  <div class="burnhead rv">
+    <p class="burnbig">Every <b>5 hours</b>, <span data-tkr>$BRIER</span> gets burned.</p>
+    <p class="note" style="margin:0">A share of the supply goes to an address nobody holds the keys to.
+    It only moves one way. The clock below is on a fixed schedule &mdash; the same for everyone,
+    and reloading the page does not reset it.</p>
+  </div>
+
+  <div class="burnbox rv">
+    <div class="burnlab">next burn in</div>
+    <div class="burnclock" aria-live="off">
+      <div class="u"><div class="d" id="bH"><b>0</b><b>5</b></div><s>hours</s></div>
+      <div class="sep">:</div>
+      <div class="u"><div class="d" id="bM"><b>0</b><b>0</b></div><s>minutes</s></div>
+      <div class="sep">:</div>
+      <div class="u"><div class="d" id="bS"><b>0</b><b>0</b></div><s>seconds</s></div>
+    </div>
+    <div class="burnbar"><i id="bFill"></i></div>
+    <div class="burnrow"><span id="bNow">00:00:00 UTC</span><span id="bPct">0% of the window</span></div>
+
+    <div class="burnfacts">
+      <div><u>every</u><b>5 hours</b></div>
+      <div><u>burns a day</u><b>4.8</b></div>
+      <div><u>next three</u><b id="bNext">&mdash;</b></div>
+      <div><u>burned so far</u><b id="bDone" class="dash">&mdash;</b></div>
+    </div>
+  </div>
+  <p class="note rv" style="margin-top:14px;font-size:12.5px">The clock is arithmetic, not a chain read &mdash;
+  it cannot tell you a burn happened. Each burn is a transaction; check it on the explorer. Amounts stay a dash
+  until there is something real to show.</p>
+</div></section>
+
 <!-- ══════════════ live chart ══════════════ -->
 <section id="chart"><div class="wrap">
-  <div class="eyebrow rv"><span class="num">13</span><h2>live chart</h2><span class="ln"></span>
+  <div class="eyebrow rv"><span class="num">14</span><h2>live chart</h2><span class="ln"></span>
     <span class="num" id="chPairTop">$BRIER</span></div>
   <h3 class="bighead rv">The tape, unedited</h3>
   <p class="note rv" style="margin:0">Straight from the pool with nothing smoothed over. If the frame stays
@@ -878,7 +941,7 @@ the chain only proves the file has not moved since.
 
 <!-- ══════════════ faq ══════════════ -->
 <section id="faq"><div class="wrap">
-  <div class="eyebrow rv"><span class="num">14</span><h2>what this is not</h2><span class="ln"></span></div>
+  <div class="eyebrow rv"><span class="num">15</span><h2>what this is not</h2><span class="ln"></span></div>
   <div class="faq rv">
     <details open><summary>Does it predict anything?</summary>
       <p>No. It grades what somebody else predicted. There is no signal here, no trading in it, and nothing to
@@ -1128,6 +1191,40 @@ const BUY_URL = CONFIG.buy || (CONFIG.ca ? (CONFIG.launchpad||'')+CONFIG.ca : ''
     navigator.clipboard&&navigator.clipboard.writeText(CONFIG.ca).then(()=>{
       cc.textContent='copied'; setTimeout(()=>cc.textContent='copy',1400); },()=>{});
   });
+})();
+
+/* ══════════════════════════════════════════════════════════════
+   the burn clock — pinned to a fixed instant, so it is the same for
+   everyone and a reload changes nothing. 5 h does not divide a day,
+   so the next windows are listed rather than a daily grid.
+   ══════════════════════════════════════════════════════════════ */
+(function burn(){
+  if(!$('bH')) return;
+  const EVERY=5*3600*1000, BASE=1789901100*1000;   // 2026-09-20 10:45:00 UTC
+  const p2=n=>String(n).padStart(2,'0');
+  const hhmm=t=>{ const d=new Date(t); return p2(d.getUTCHours())+':'+p2(d.getUTCMinutes()); };
+  function digits(box,n){
+    const t=p2(n), b=box.children;
+    for(let i=0;i<2;i++){
+      if(b[i].textContent===t[i]) continue;
+      b[i].textContent=t[i]; b[i].classList.add('hit');
+      setTimeout((e=>()=>e.classList.remove('hit'))(b[i]),180);
+    }
+  }
+  function tick(){
+    const now=Date.now();
+    const since=((now-BASE)%EVERY+EVERY)%EVERY;
+    const left=Math.ceil((EVERY-since)/1000);
+    digits($('bH'),Math.floor(left/3600)); digits($('bM'),Math.floor(left/60)%60); digits($('bS'),left%60);
+    const pct=since/EVERY*100;
+    $('bFill').style.width=pct.toFixed(2)+'%';
+    $('bPct').textContent=pct.toFixed(1)+'% of the window';
+    const d=new Date(now);
+    $('bNow').textContent=p2(d.getUTCHours())+':'+p2(d.getUTCMinutes())+':'+p2(d.getUTCSeconds())+' UTC';
+    const next=now+(EVERY-since);
+    $('bNext').textContent=[0,1,2].map(k=>hhmm(next+k*EVERY)).join(' · ')+' UTC';
+  }
+  tick(); setInterval(tick,250);
 })();
 
 /* the floor film — plays when it is on screen, pauses when it is not */
